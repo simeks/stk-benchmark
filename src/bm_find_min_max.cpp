@@ -58,12 +58,33 @@ static void BM_gpu_volume_find_min_max_1(benchmark::State& state)
         
         float min, max;
         find_min_max_1(gpu_vol, min, max);
+    }
+}
 
-        if(fabs(min - gt_min) > 0.00001f) printf("%f != %f\n", min, gt_min);
-        if(fabs(max - gt_max) > 0.00001f) printf("%f != %f\n", max, gt_max);
+// Algo 2
+static void BM_gpu_volume_find_min_max_2(benchmark::State& state)
+{
+    dim3 dims {
+        (uint32_t)state.range(0),
+        (uint32_t)state.range(0),
+        (uint32_t)state.range(0)
+    };
+
+    stk::VolumeFloat vol(dims);
+    fill_data((float*)vol.ptr(), dims.x*dims.y*dims.z);
+    float gt_min, gt_max;
+    stk::find_min_max(vol, gt_min, gt_max);
+
+    stk::GpuVolume gpu_vol(vol);
+
+    for (auto _ : state) {
+        
+        float min, max;
+        find_min_max_2(gpu_vol, min, max);
     }
 }
 
 
 BENCHMARK(BM_volume_find_min_max)->Range(8, 512);
 BENCHMARK(BM_gpu_volume_find_min_max_1)->Range(8, 512);
+BENCHMARK(BM_gpu_volume_find_min_max_2)->Range(8, 512);
