@@ -7,6 +7,8 @@ set(STK_BENCHMARK_SRCS
 if (STK_USE_CUDA)
     set(STK_BENCHMARK_SRCS
         ${STK_BENCHMARK_SRCS}
+        "gpu/find_min_max.cu"
+        "gpu/find_min_max.h"
     )
 endif ()
 

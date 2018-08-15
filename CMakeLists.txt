@@ -50,7 +50,12 @@ if (STK_USE_CUDA)
     find_package(CUDA REQUIRED)
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_FLAGS}")
+# /wd4722 : destructor never returns, potential memory leak
+# /wd4244 : 'return': conversion from 'int64_t' to 'double',
+# /wd1000 : 'state': unreferenced formal parameter
+set(EXTRA_FLAGS "${EXTRA_FLAGS} /wd4722 /wd4244 /wd4100")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_FLAGS} /wd4722")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${EXTRA_FLAGS_RELEASE}")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_FLAGS}")
@@ -60,11 +65,9 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${EXTRA_LINK_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} ${EXTRA_LINK_FLAGS_RELEASE}")
 
 
-set(BENCHMARK_ENABLE_GTEST_TESTS OFF)
+set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "Do not build benchmark tests")
 add_subdirectory(benchmark)
-set_target_properties(benchmark PROPERTIES COMPILE_FLAGS 
-    "/wd4722" # destructor never returns, potential memory leak
-    )
-
+set(STK_BUILD_TESTS OFF CACHE BOOL "Do not build stk tests")
+set(STK_BUILD_EXAMPLES OFF CACHE BOOL "Do not build stk examples")
 add_subdirectory(stk)
 add_subdirectory(src)
