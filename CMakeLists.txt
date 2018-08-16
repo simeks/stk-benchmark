@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 
-set(STK_USE_CUDA ON)
-set(STK_ENABLE_FAST_MATH ON)
+set(STK_USE_CUDA ON CACHE BOOL "" FORCE)
+#set(STK_ENABLE_FAST_MATH OFF CACHE BOOL "")
 
 if(NOT CMAKE_BUILD_TYPE)
     message(STATUS "Setting default build type: 'Release'")
@@ -67,7 +67,6 @@ set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} ${EXTRA_LI
 
 set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "Do not build benchmark tests")
 add_subdirectory(benchmark)
-set(STK_BUILD_TESTS OFF CACHE BOOL "Do not build stk tests")
 set(STK_BUILD_EXAMPLES OFF CACHE BOOL "Do not build stk examples")
 add_subdirectory(stk)
 add_subdirectory(src)

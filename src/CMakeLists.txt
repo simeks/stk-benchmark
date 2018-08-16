@@ -1,6 +1,8 @@
 set(STK_BENCHMARK_SRCS 
     "bm_main.cpp"
     "bm_find_min_max.cpp"
+    "bm_normalize.cpp"
+    "test_data.cpp"
 )
 
 
