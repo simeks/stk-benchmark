@@ -6,6 +6,7 @@
 #include <stk/image/gpu_volume.h>
 
 #include <algorithm>
+#include <cfloat>
 
 namespace cuda = stk::cuda;
 
