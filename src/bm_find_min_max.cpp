@@ -24,8 +24,8 @@ static void BM_volume_find_min_max(benchmark::State& state)
     }
 }
 
-// Algo 1
-static void BM_gpu_volume_find_min_max_1(benchmark::State& state)
+// Non-optimized
+static void BM_gpu_volume_find_min_max_slow(benchmark::State& state)
 {
     dim3 dims {
         (uint32_t)state.range(0),
@@ -40,15 +40,14 @@ static void BM_gpu_volume_find_min_max_1(benchmark::State& state)
 
     stk::GpuVolume gpu_vol(vol);
 
+    float min, max;
     for (auto _ : state) {
-        
-        float min, max;
         find_min_max_1(gpu_vol, min, max);
     }
 }
 
-// Algo 2
-static void BM_gpu_volume_find_min_max_2(benchmark::State& state)
+// STK version
+static void BM_gpu_volume_find_min_max(benchmark::State& state)
 {
     dim3 dims {
         (uint32_t)state.range(0),
@@ -63,14 +62,18 @@ static void BM_gpu_volume_find_min_max_2(benchmark::State& state)
 
     stk::GpuVolume gpu_vol(vol);
 
+    float min, max;
     for (auto _ : state) {
-        
-        float min, max;
-        find_min_max_2(gpu_vol, min, max);
+        stk::find_min_max(gpu_vol, min, max);
     }
 }
 
-
-BENCHMARK(BM_volume_find_min_max)->Range(8, 512);
-BENCHMARK(BM_gpu_volume_find_min_max_1)->Range(8, 512);
-BENCHMARK(BM_gpu_volume_find_min_max_2)->Range(8, 512);
+BENCHMARK(BM_volume_find_min_max)
+    ->RangeMultiplier(2)
+    ->Range(8, 512);
+BENCHMARK(BM_gpu_volume_find_min_max_slow)
+    ->RangeMultiplier(2)
+    ->Range(8, 512);
+BENCHMARK(BM_gpu_volume_find_min_max)
+    ->RangeMultiplier(2)
+    ->Range(8, 512);
