@@ -6,7 +6,7 @@ set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "Do not build benchmark tests")
 if(NOT WIN32)
     find_package(benchmark)
 endif()
-if(NOT ${benchmark_FOUND})
+if(NOT benchmark_FOUND)
     add_subdirectory(benchmark)
 endif()
 
